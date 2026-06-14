@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->dropColumn('name');
+        Schema::table('periods', function (Blueprint $table) {
+            $table->integer('order')->after('session')->default(1);
         });
     }
 
     public function down(): void
     {
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->string('name')->nullable();
+        Schema::table('periods', function (Blueprint $table) {
+            $table->dropColumn('order');
         });
     }
 };
