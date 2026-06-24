@@ -63,5 +63,30 @@ class ScheduleController extends Controller
         ]);
     }
 
+    // Giáo viên điền tên bài dạy vào 1 tiết
+    public function updateLesson(Request $request, $id){
+        $request->validate([
+            'lesson_name' => 'required|string|max:255',
+        ]);
+        $period = Period::findOrFail($id);
+        
+        // Kiểm tra tiết này có thuộc schedule của giáo viên đang login không
+        $schedule = Schedule::where('id', $period->schedule_id)
+            ->where('teacher_id', $request->user()->id)
+            ->first();
+
+        if (!$schedule) {
+            return response()->json(['message' => 'Bạn không có quyền sửa tiết này'], 403);
+        }
+
+        // Không cho sửa nếu đã duyệt
+        if ($schedule->status == 3) {
+            return response()->json(['message' => 'Lịch đã được duyệt, không thể sửa'], 403);
+        }
+
+        $period->update(['lesson_name' => $request->lesson_name]);
+
+        return response()->json(['message' => 'Đã cập nhật bài dạy', 'period' => $period]);
+    }
 
 }

@@ -28,4 +28,5 @@ Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
     // kiểm tra lịch báo giảng
     Route::get('/schedule/my', [ScheduleController::class, 'mySchedule']);
     // cập nhật lịch báo giảng (thêm tên bài dạy) - tạm thời để string
+    Route::put('/periods/{id}/lesson', [ScheduleController::class, 'updateLesson']);
 });
