@@ -10,7 +10,7 @@ use App\Models\Week;
 
 class ScheduleController extends Controller
 {
-    // Lịch báo giảng cá nhân trong 1 tuần
+    // Giáo viên xem lịch báo giảng cá nhân trong 1 tuần
     public function mySchedule(Request $request){
         $user = $request->user();
         $weekId = $request->query('week_id');
@@ -89,4 +89,17 @@ class ScheduleController extends Controller
         return response()->json(['message' => 'Đã cập nhật bài dạy', 'period' => $period]);
     }
 
+     // Giáo viên submit báo giảng cả tuần (Cập nhật trạng thái từ 1 (chưa gửi duyệt) -> 2 (chưa duyệt))
+    public function submit(Request $request, $id){
+        $schedule = Schedule::where('id', $id)
+            ->where('teacher_id', $request->user()->id)
+            ->firstOrFail();
+
+        if ($schedule->status != 1) {
+            return response()->json(['message' => 'Lịch đã được gửi hoặc duyệt rồi'], 400);
+        }
+
+        $schedule->update(['status' => 2]);
+        return response()->json(['message' => 'Đã gửi báo giảng thành công']);
+    }
 }
