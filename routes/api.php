@@ -21,6 +21,8 @@ Route::middleware(['auth:sanctum', 'role:school_admin,principal'])->group(functi
     Route::post('/classes', [ClassController::class, 'store']);
     Route::put('/classes/{id}', [ClassController::class, 'update']);
     Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
+    // Hiệu trưởng duyệt lịch báo giảng
+    Route::put('/schedule/{id}/approve', [ScheduleController::class, 'approve']);
 });
 
 // Giáo viên

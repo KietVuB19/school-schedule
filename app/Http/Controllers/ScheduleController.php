@@ -89,17 +89,31 @@ class ScheduleController extends Controller
         return response()->json(['message' => 'Đã cập nhật bài dạy', 'period' => $period]);
     }
 
-     // Giáo viên submit báo giảng cả tuần (Cập nhật trạng thái từ 1 (chưa gửi duyệt) -> 2 (chưa duyệt))
+    // Giáo viên submit báo giảng cả tuần (Cập nhật trạng thái từ 1 (chưa gửi duyệt) -> 2 (chưa duyệt))
     public function submit(Request $request, $id){
         $schedule = Schedule::where('id', $id)
             ->where('teacher_id', $request->user()->id)
             ->firstOrFail();
 
         if ($schedule->status != 1) {
-            return response()->json(['message' => 'Lịch đã được gửi hoặc duyệt rồi'], 400);
+            return response()->json(['message' => 'Lịch báo giảng đã được gửi hoặc đã duyệt rồi'], 400);
         }
 
         $schedule->update(['status' => 2]);
-        return response()->json(['message' => 'Đã gửi báo giảng thành công']);
+        return response()->json(['message' => 'Đã gửi lịch báo giảng thành công']);
     }
+
+    // Hiệu trưởng duyệt báo giảng
+    public function approve(Request $request, $id){
+        $schedule = Schedule::findOrFail($id);
+
+        if ($schedule->status != 2) {
+            return response()->json(['message' => 'Lịch chưa được gửi duyệt'], 400);
+        }
+
+        $schedule->update(['status' => 3]);
+
+        return response()->json(['message' => 'Đã duyệt báo giảng']);
+    }
+
 }
