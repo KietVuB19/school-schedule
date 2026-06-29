@@ -13,16 +13,25 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum', 'role:principal,school_admin'])->get('/dashboard/school', [DashboardController::class, 'school']);
+// Admin
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    // tạo trường
+    // tạo tài khoản hiệu trưởng
+});
 
-// Admin/HIệu trưởng
-Route::middleware(['auth:sanctum', 'role:school_admin,principal'])->group(function () {
+// HIệu trưởng
+Route::middleware(['auth:sanctum', 'role:principal'])->group(function () {
+    // check dashboard
+    Route::get('/dashboard/school', [DashboardController::class, 'school']);
+    // quanr lý lớp (xem, thêm, sửa, xóa)
     Route::get('/classes', [ClassController::class, 'index']);
     Route::post('/classes', [ClassController::class, 'store']);
     Route::put('/classes/{id}', [ClassController::class, 'update']);
     Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
-    // Hiệu trưởng duyệt lịch báo giảng
+    // duyệt lịch báo giảng
     Route::put('/schedule/{id}/approve', [ScheduleController::class, 'approve']);
+
+    // tạo tài khoản hiệu trưởng (TODO)
 });
 
 // Giáo viên
