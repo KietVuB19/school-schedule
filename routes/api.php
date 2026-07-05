@@ -43,4 +43,8 @@ Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
     Route::put('/periods/{id}/lesson', [ScheduleController::class, 'updateLesson']);
     // gửi duyệt lịch báo giảng
     Route::put('/schedule/{id}/submit', [ScheduleController::class, 'submit']);
+
+    // điểm danh
+    Route::get('/periods/{id}/students', [RollcallController::class, 'getStudents']);
+    Route::post('/periods/{id}/rollcall', [RollcallController::class, 'store']);
 });
