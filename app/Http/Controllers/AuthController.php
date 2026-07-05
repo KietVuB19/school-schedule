@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
-    {
+    public function login(Request $request){
         // Validate email + password không được trống
         $request->validate([
             'email' => 'required|email',
@@ -34,5 +33,10 @@ class AuthController extends Controller
                 'role' => $user->role,
             ]
         ]);
+    }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Đã đăng xuất']);
     }
 }

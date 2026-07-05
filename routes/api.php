@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 // Admin
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
