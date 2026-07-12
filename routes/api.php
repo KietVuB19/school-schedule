@@ -3,6 +3,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\RollcallController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
