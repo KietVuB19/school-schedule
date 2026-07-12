@@ -12,6 +12,10 @@ class RollcallController extends Controller
     // Danh sách học sinh trong 1 tiết học
     public function getStudents($periodId){
         $period = Period::findOrFail($periodId);
+        $schedule = DB::table('schedules')->where('id', $period->schedule_id)->first();
+        if (!$schedule || $schedule->status != 3) {
+            return response()->json(['message' => 'Lịch báo giảng chưa được duyệt, không thể điểm danh'], 403);
+        }
 
         $students = DB::table('class_students')
             ->join('students', 'students.id', '=', 'class_students.student_id')
@@ -48,6 +52,11 @@ class RollcallController extends Controller
         ]);
 
         $period = Period::findOrFail($periodId);
+
+        $schedule = DB::table('schedules')->where('id', $period->schedule_id)->first();
+        if (!$schedule || $schedule->status != 3) {
+            return response()->json(['message' => 'Lịch báo giảng chưa được duyệt, không thể điểm danh'], 403);
+        }
 
         foreach ($request->rollcalls as $item) {
             Rollcall::updateOrCreate(

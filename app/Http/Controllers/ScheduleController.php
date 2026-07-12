@@ -105,15 +105,10 @@ class ScheduleController extends Controller
 
     // Hiệu trưởng duyệt báo giảng
     public function approve(Request $request, $id){
-        $schedule = Schedule::findOrFail($id);
-
-        if ($schedule->status != 2) {
-            return response()->json(['message' => 'Lịch chưa được gửi duyệt'], 400);
+        $updated = Schedule::where('id', $id)->where('status', 2)->update(['status' => 3]);
+        if (!$updated) {
+            return response()->json(['message' => 'Lịch không ở trạng thái chờ duyệt'], 400);
         }
-
-        $schedule->update(['status' => 3]);
-
-        return response()->json(['message' => 'Đã duyệt báo giảng']);
     }
 
 }
